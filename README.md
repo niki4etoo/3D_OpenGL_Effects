@@ -1,10 +1,10 @@
 # 3D_OpenGL_Exercises
 Several exercises with OpenGL and C++
 
-# Run exercises
+# Run exercises on linux
 make
 
-./file_generated
+./file_generated ( Light, Light2, Material, etc.)
 
 Each exercise use the following controls:
 W,S,A,D for moving in the world space
