@@ -13,10 +13,12 @@ struct Light {
 	vec3 position;
 	vec3 direction;
 	
+	//light properties
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
 	
+	// attenuation parameters
 	float constant;
 	float linear;
 	float quadratic;
