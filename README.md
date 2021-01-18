@@ -1,5 +1,5 @@
-# 3D_OpenGL_Exercises
-Several exercises with OpenGL, GLSL and C++
+# 3D OpenGL Effects
+Several exercises and effects with OpenGL, GLSL and C++
 
 # Run exercises on linux
 make
