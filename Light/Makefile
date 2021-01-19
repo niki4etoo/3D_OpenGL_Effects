@@ -1,2 +1,7 @@
+OUTPUT = light1
+CPP = main.cpp
+OBJ = libs/glad.o
+LIBS = -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lm
+
 main:
-	g++ -std=c++11 -ggdb -o Light libs/glad.o main.cpp -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lm 
+	g++ -std=c++11 -ggdb -o $(OUTPUT) $(OBJ) $(CPP) $(LIBS)  
