@@ -1,2 +1,7 @@
+OUTPUT = multilightsources
+CPP = main.cpp
+OBJ = glad.o
+LIBS = -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lm
+
 main:
-	g++ -std=c++11 -ggdb -o multilightsources glad.o main.cpp -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lm 
+	g++ -std=c++11 -ggdb -o $(OUTPUT) $(OBJ) $(CPP) $(LIBS)
