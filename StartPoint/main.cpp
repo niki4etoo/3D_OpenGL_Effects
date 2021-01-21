@@ -8,17 +8,17 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+
+#include "include/camera.h"
 #include "include/shader.h"
 #include "include/callbacks.h"
 #include "include/texture_loader.h"
+#include "include/input_processing.h"
 
-
-float cameraSpeed = 2.5f;
 float deltaTime = 0.0f, currentFrame = 0.0f, lastFrame = 0.0f;
 
-void processInput(GLFWwindow *window, float deltaTime);
-
 Callbacks *callback = new Callbacks();
+InputProcessing *input = new InputProcessing();
 
 int main()
 {
@@ -191,7 +191,7 @@ int main()
 		
         // input
         // -----
-        processInput(window, deltaTime);
+        input->keyboard_input(window, deltaTime);
 
         // render
         // ------
@@ -256,23 +256,4 @@ int main()
     // ------------------------------------------------------------------
     glfwTerminate();
     return 0;
-}
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window, float deltaTime)
-{
-	cameraSpeed = 5.5f * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-        
-	//Camera controls
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPos += cameraSpeed * cameraFront;
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPos -= cameraSpeed * cameraFront;
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
