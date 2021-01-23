@@ -8,7 +8,6 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-
 #include "include/camera.h"
 #include "include/shader.h"
 #include "include/callbacks.h"
@@ -60,6 +59,7 @@ int main()
 	glfwSetCursorPosCallback(window, callback->mouse_callback);
 	glfwSetScrollCallback(window, callback->scroll_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -72,37 +72,37 @@ int main()
     // build and compile our shader program
     // ------------------------------------
     Shader ourShader("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl"); 
-    
-    // set up vertex data ( Cube )
-    // ------------------------------------------------------------------
-    float vertices[] = {
+	
+	// set up vertex data ( Cube )
+	// ------------------------------------------------------------------
+	float vertices[] = {
 		//front face
-        //first triangle       	//Texture coords
-         0.5f,  0.5f, 0.5f,	 	1.0f, 1.0f,		//top right
-         0.5f, -0.5f, 0.5f,  	1.0f, 0.0f,		//bottom right
-        -0.5f, -0.5f, 0.5f,		0.0f, 0.0f,		//bottom left
-        //second triangle
-         0.5f,  0.5f, 0.5f,		1.0f, 1.0f,		//top right
-        -0.5f, -0.5f, 0.5f,		0.0f, 0.0f,		//bottom left
-        -0.5f,  0.5f, 0.5f,		0.0f, 1.0f,		//top left
-        
-        //back face
-        //first triangle		//Texture coords
-        0.5f,  0.5f, -0.5f,		1.0f, 1.0f, 	//top right
-        0.5f, -0.5f, -0.5f, 	1.0f, 0.0f,		//bottom right
-       -0.5f, -0.5f, -0.5f, 	0.0f, 0.0f, 	//bottom left 
-       //second triangle
-	    0.5f,  0.5f, -0.5f,		1.0f, 1.0f,		//top right
+		//first triangle       	//Texture coords
+		 0.5f,  0.5f, 0.5f,	 	1.0f, 1.0f,		//top right
+		 0.5f, -0.5f, 0.5f,  	1.0f, 0.0f,		//bottom right
+		-0.5f, -0.5f, 0.5f,		0.0f, 0.0f,		//bottom left
+		//second triangle
+		 0.5f,  0.5f, 0.5f,		1.0f, 1.0f,		//top right
+		-0.5f, -0.5f, 0.5f,		0.0f, 0.0f,		//bottom left
+		-0.5f,  0.5f, 0.5f,		0.0f, 1.0f,		//top left
+		
+		//back face
+		//first triangle		//Texture coords
+		0.5f,  0.5f, -0.5f,		1.0f, 1.0f, 	//top right
+		0.5f, -0.5f, -0.5f, 	1.0f, 0.0f,		//bottom right
+	   -0.5f, -0.5f, -0.5f, 	0.0f, 0.0f, 	//bottom left 
+	   //second triangle
+		0.5f,  0.5f, -0.5f,		1.0f, 1.0f,		//top right
 	   -0.5f, -0.5f, -0.5f,		0.0f, 0.0f,		//bottom left
 	   -0.5f,  0.5f, -0.5f,		0.0f, 1.0f,		//top left
 	   
 	   //top face
 	   //first triangle
-	    0.5f,  0.5f, -0.5f,		1.0f, 1.0f, 	//top right
-	    0.5f,  0.5f,  0.5f,		1.0f, 0.0f, 	//bottom right
+		0.5f,  0.5f, -0.5f,		1.0f, 1.0f, 	//top right
+		0.5f,  0.5f,  0.5f,		1.0f, 0.0f, 	//bottom right
 	   -0.5f,  0.5f,  0.5f,		0.0f, 0.0f, 	//bottom left
 	   //second triangle
-	    0.5f,  0.5f, -0.5f,		1.0f, 1.0f, 	//top right
+		0.5f,  0.5f, -0.5f,		1.0f, 1.0f, 	//top right
 	   -0.5f,  0.5f,  0.5f, 	0.0f, 0.0f, 	//bottom left
 	   -0.5f,  0.5f, -0.5f, 	0.0f, 1.0f, 	//top left
 	   
@@ -135,7 +135,7 @@ int main()
 	   0.5f,  0.5f,  0.5f,		1.0f, 1.0f,		//top right
 	   0.5f, -0.5f, -0.5f,		0.0f, 0.0f, 	//bottom left
 	   0.5f,  0.5f, -0.5f,		0.0f, 1.0f, 	//top left
-    };
+	};
 	
 	glm::vec3 cubePositions[] = {
 		glm::vec3( 0.0f,  0.0f,  -9.0f), 
@@ -148,8 +148,14 @@ int main()
 		glm::vec3( 1.5f,  2.0f, -2.5f), 
 		glm::vec3( 1.5f,  0.2f, -1.5f), 
 		glm::vec3( 4.5f,  10.2f, -4.5f), 
-		glm::vec3( 1.5f,  5.2f, -8.5f), 
-		glm::vec3(-1.3f,  1.0f, -1.5f)
+		glm::vec3( 1.5f,  5.2f, -8.5f),
+		glm::vec3(-4.7f,  -3.0f, -17.5f),  
+		glm::vec3( 6.3f, 2.0f, -10.5f),  
+		glm::vec3( 8.5f,  2.0f, -20.5f), 
+		glm::vec3( 5.5f,  -5.2f, -17.5f), 
+		glm::vec3( 9.5f,  10.2f, -4.5f), 
+		glm::vec3( 12.5f,  -5.2f, 8.5f), 
+		glm::vec3(-18.3f,  10.0f, -10.5f)
 	};
 	
     unsigned int VAO, VBO;
@@ -158,13 +164,14 @@ int main()
     
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(VAO);
-
+	
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    
     // texture1 attribute
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
@@ -214,7 +221,7 @@ int main()
         
 		glBindVertexArray(VAO);
 		glActiveTexture(GL_TEXTURE0);
-		for(unsigned int i = 0; i < 12; i++)
+		for(unsigned int i = 0; i < 18; i++)
 		{
 			if(i % 3 == 0)
 			{
@@ -237,7 +244,6 @@ int main()
 		
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
-        
         
         
 
