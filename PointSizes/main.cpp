@@ -67,10 +67,8 @@ int main()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }	
-	
-	glEnable(GL_DEPTH_TEST);
+
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
-	
     // build and compile our shader program
     // ------------------------------------
     Shader ourShader("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl"); 
@@ -136,8 +134,6 @@ int main()
 		glBindVertexArray(VAO);
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.0f));
-		float angle = 40.0f;
-		//model = glm::rotate(model, glm::radians(angle) * ((float)glfwGetTime()*2), glm::vec3(0.5f, 0.5f, 0.5f));
 		ourShader.setMat4("model", model);
 		glDrawArrays(GL_POINTS, 0, 6);
         
