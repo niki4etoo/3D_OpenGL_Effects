@@ -68,8 +68,9 @@ int main()
         return -1;
     }	
 	
-//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+	
     // build and compile our shader program
     // ------------------------------------
     Shader ourShader("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl"); 
