@@ -244,7 +244,8 @@ int main()
     // shader configuration
     // --------------------
     shader.use();
-    shader.setInt("texture1", 0);
+    shader.setInt("frontTexture", 1);
+    shader.setInt("backTexture", 0);
 
 	std::map<float, glm::vec3> sorted;
 	float distance;
@@ -302,9 +303,10 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
                 
-        // cubes        
+        // cubes
+        glDisable(GL_CULL_FACE);        
         glBindVertexArray(cubeVAO);
-        glActiveTexture(GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, cubeTexture); 	
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
         shader.setMat4("model", model);
@@ -315,7 +317,7 @@ int main()
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         
-        glDisable(GL_CULL_FACE);
+        
         // windows ( from furthest to nearest )
         glBindVertexArray(transparentVAO);
         glBindTexture(GL_TEXTURE_2D, transparentWindowTexture);

@@ -3,11 +3,13 @@ out vec4 FragColor;
 
 in vec2 TexCoords;
 
-uniform sampler2D texture1;
+uniform sampler2D frontTexture;
+uniform sampler2D backTexture;
 
 void main()
 {    
-    vec4 texColor = texture(texture1, TexCoords);
-    
-    FragColor = texColor;
+    if(gl_FrontFacing)
+		FragColor = texture(frontTexture, TexCoords);
+	else
+		FragColor = texture(backTexture, TexCoords);
 }
