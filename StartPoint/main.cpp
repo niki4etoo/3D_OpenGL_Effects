@@ -241,12 +241,8 @@ int main()
 			float angle = 40.0f;
 			model = glm::rotate(model, glm::radians(angle) * ((float)glfwGetTime()*2), glm::vec3(0.5f, 0.5f, 0.5f));
 			ourShader.setMat4("model", model);
-		
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
-        
-        
-
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
