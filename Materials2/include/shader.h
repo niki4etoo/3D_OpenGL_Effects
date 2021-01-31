@@ -1,12 +1,10 @@
-
-
 #ifndef SHADER_H
 #define SHADER_H
 
+#include <array>
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <iostream>
 
 class Shader
 {
@@ -41,7 +39,7 @@ public:
             fShaderFile.close();
             // convert stream into string
             vertexCode = vShaderStream.str();
-            fragmentCode = fShaderStream.str();			
+            fragmentCode = fShaderStream.str();
         }
         catch (std::ifstream::failure& e)
         {
@@ -70,7 +68,6 @@ public:
         // delete the shaders as they're linked into our program now and no longer necessery
         glDeleteShader(vertex);
         glDeleteShader(fragment);
-
     }
     // activate the shader
     // ------------------------------------------------------------------------
