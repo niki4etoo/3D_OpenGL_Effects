@@ -1,6 +1,6 @@
 OUTPUT = light1
 CPP = main.cpp
-OBJ = libs/glad.o
+OBJ = glad.o
 LIBS = -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lm
 
 main:

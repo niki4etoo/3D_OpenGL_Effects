@@ -1,14 +1,3 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include "../libs/stb_image.h"
-
-#include "../libs/glad/glad.h"
-#include "../libs/glm/glm.hpp"
-#include "../libs/glm/gtc/matrix_transform.hpp"
-#include "../libs/glm/gtc/type_ptr.hpp"
-
-#include <GLFW/glfw3.h>
-#include <iostream>
-
 #ifndef SHADER_H
 #define SHADER_H
 

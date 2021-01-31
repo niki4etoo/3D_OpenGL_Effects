@@ -1,5 +1,5 @@
-#include "shader_loader.h"
-
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 //Texture loader
 class TextureLoader {
 
