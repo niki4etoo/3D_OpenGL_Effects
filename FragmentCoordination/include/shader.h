@@ -1,18 +1,12 @@
-#include "../libs/glad/glad.h"
-#include "../libs/glm/glm.hpp"
-#include "../libs/glm/gtc/matrix_transform.hpp"
-#include "../libs/glm/gtc/type_ptr.hpp"
 
-#include <GLFW/glfw3.h>
-#include <iostream>
 
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <array>
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 class Shader
 {
@@ -47,7 +41,7 @@ public:
             fShaderFile.close();
             // convert stream into string
             vertexCode = vShaderStream.str();
-            fragmentCode = fShaderStream.str();
+            fragmentCode = fShaderStream.str();			
         }
         catch (std::ifstream::failure& e)
         {
@@ -76,6 +70,7 @@ public:
         // delete the shaders as they're linked into our program now and no longer necessery
         glDeleteShader(vertex);
         glDeleteShader(fragment);
+
     }
     // activate the shader
     // ------------------------------------------------------------------------

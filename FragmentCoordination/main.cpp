@@ -1,23 +1,22 @@
- #include "loaders/texture_loader.h"
+#include "include/glad/glad.h"
+#include <GLFW/glfw3.h>
 
-float cameraSpeed = 2.5f;
+#include <iostream>
+#include <vector>
+
+#include "include/glm/glm.hpp"
+#include "include/glm/gtc/matrix_transform.hpp"
+#include "include/glm/gtc/type_ptr.hpp"
+#include "include/shader.h"
+#include "include/camera.h"
+#include "include/loaders/texture_loader.h"
+#include "include/callbacks.h"
+#include "include/input_processing.h"
+
 float deltaTime = 0.0f, currentFrame = 0.0f, lastFrame = 0.0f;
 
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 1.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window, float deltaTime);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-
-//Mouse parameters
-bool firstMouse = true;
-const float sensitivity = 0.1f;
-float pitch = 0.0f, yaw = -90.0f;
-float lastX = 0.0f, lastY = 0.0f;
-float fov = 45.0f;
+Callbacks *callback = new Callbacks();
+InputProcessing *input = new InputProcessing();
 
 int main()
 {
@@ -36,12 +35,12 @@ int main()
 	const unsigned int SCR_HEIGHT = 600;
 	
 	//Mouse last position
-	lastX = SCR_WIDTH / 2, lastY = SCR_HEIGHT / 2;
+	float lastX = SCR_WIDTH / 2, lastY = SCR_HEIGHT / 2;
 	
 	
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Fragment Coordination variable", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Fragment Coordination", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -49,11 +48,9 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	
-	// Setting mouse input
-	glfwSetCursorPosCallback(window, mouse_callback);
-	glfwSetScrollCallback(window, scroll_callback);
+    glfwSetFramebufferSizeCallback(window, callback->framebuffer_size);
+	glfwSetCursorPosCallback(window, callback->mouse_input);
+	glfwSetScrollCallback(window, callback->mouse_scroll);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
     // glad: load all OpenGL function pointers
@@ -181,7 +178,7 @@ int main()
 		
         // input
         // -----
-        processInput(window, deltaTime);
+        input->keyboard_input(window, deltaTime);
 
         // render
         // ------
@@ -195,8 +192,8 @@ int main()
         glm::mat4 view          = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
         glm::mat4 projection    = glm::mat4(1.0f);
         
-        projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 150.0f);
-		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        projection = glm::perspective(glm::radians(mouse.fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 150.0f);
+		view = glm::lookAt(camera->Position, camera->Position + camera->Front, camera->Up);
         
         // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
         lightingShader.setMat4("projection", projection);
@@ -233,73 +230,3 @@ int main()
     glfwTerminate();
     return 0;
 }
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window, float deltaTime)
-{
-	cameraSpeed = 5.5f * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-        
-	//Camera controls
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPos += cameraSpeed * cameraFront;
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPos -= cameraSpeed * cameraFront;
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-}
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	if(firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
-	
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos;
-	lastX = xpos;
-	lastY = ypos;
-	
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
-	
-	yaw += xoffset;
-	pitch += yoffset;
-	
-	if(pitch > 89.0f)
-		pitch = 89.0f;
-	if(pitch < -89.0f)
-		pitch = -89.0f;
-		
-	glm::vec3 direction;
-	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	direction.y = sin(glm::radians(pitch));
-	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	cameraFront = glm::normalize(direction);
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-    fov -= (float)yoffset;
-    if (fov < 1.0f)
-        fov = 1.0f;
-    if (fov > 45.0f)
-        fov = 45.0f;
-}
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
-    glViewport(0, 0, width, height);
-}
-
