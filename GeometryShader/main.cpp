@@ -19,14 +19,10 @@ const unsigned int SCR_HEIGHT = 600;
 // camera
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
-bool firstMouse = true;
 
 // timing
 float deltaTime = 0.0f;	
 float lastFrame = 0.0f;
-
-// lighting
-glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
 
 Callbacks *callback = new Callbacks();
 InputProcessing *input = new InputProcessing();
@@ -55,8 +51,6 @@ int main()
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, callback->framebuffer_size_callback);
-    //glfwSetCursorPosCallback(window, callback->mouse_callback);
-    //glfwSetScrollCallback(window, callback->scroll_callback);
 
     // tell GLFW to capture our mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -78,10 +72,11 @@ int main()
     Shader shader("shaders/vertex.glsl", "shaders/fragment.glsl", "shaders/geometry.glsl");
     
     float points[] = {
-        -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // top-left
-         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // top-right
-         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom-right
-        -0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // bottom-left
+		0.0f, 0.0f, 0.0f, 0.0f, 1.0f, //center / blue color
+       -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, // top-left
+        0.5f,  0.5f, 0.0f, 0.0f, 1.0f, // top-right
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom-right
+       -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // bottom-left
     };   
     
     unsigned int VBO, VAO;
@@ -118,7 +113,7 @@ int main()
         // draw points
         shader.use();
         glBindVertexArray(VAO);
-        glDrawArrays(GL_POINTS, 0, 4);
+        glDrawArrays(GL_POINTS, 0, 5);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
