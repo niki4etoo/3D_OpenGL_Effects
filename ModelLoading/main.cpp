@@ -1,6 +1,6 @@
 #include "include/glad/glad.h"
 #include <GLFW/glfw3.h>
-
+#include <GL/glcorearb.h>
 #include <iostream>
 #include <vector>
 
@@ -50,6 +50,7 @@ int main()
         glfwTerminate();
         return -1;
     }
+    
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, callback->framebuffer_size_callback);
     glfwSetCursorPosCallback(window, callback->mouse_callback);
@@ -75,18 +76,17 @@ int main()
 
     // build and compile shaders
     // -------------------------
-    Shader modelShader("shaders/model_vertex.glsl", "shaders/model_fragment.glsl");
-	modelShader.use();
-	modelShader.setInt("material.diffuse", 0);
-	modelShader.setInt("material.specular", 1);
+    Shader shader("shaders/model_vertex.glsl", "shaders/model_fragment.glsl", "shaders/model_geometry_explode.glsl");
+    	
     // load models
     // -----------
-    const std::string model_str = "models/landscape_mountains/landscape_mountains.obj";
-    Model model_mountains(model_str);
+    //const std::string model_str = "models/landscape_mountains/landscape_mountains.obj";
+    const std::string model_str = "models/backpack/backpack.obj";
+    Model model_backpack(model_str);
     
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+	
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -106,24 +106,21 @@ int main()
         glClearColor(0.04f, 0.05f, 0.95f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // don't forget to enable shader before setting uniforms
-        modelShader.use();
-        modelShader.setVec3("viewPos", camera->Position);
-        // view/projection transformations
-        glm::mat4 projection = glm::perspective(glm::radians(mouse.fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 400.0f);
-        glm::mat4 view = camera->GetViewMatrix();
-        modelShader.setMat4("projection", projection);
-        modelShader.setMat4("view", view);
-
-        // render the loaded model
+        // configure transformation matrices
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 1.0f, 100.0f);
+        glm::mat4 view = camera->GetViewMatrix();;
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));	// it's a bit too big for our scene, so scale it down
-        //model = glm::rotate(model, glm::radians(8.0f * (float)glfwGetTime()), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelShader.setMat4("model", model);
-        model_mountains.Draw(modelShader);
+        shader.use();
+        shader.setMat4("projection", projection);
+        shader.setMat4("view", view);
+        shader.setMat4("model", model);
 
+        // add time component to geometry shader in the form of a uniform
+        shader.setFloat("time", glfwGetTime());
 
+        // draw model
+        model_backpack.Draw(shader);
+        
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
