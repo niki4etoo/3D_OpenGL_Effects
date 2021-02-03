@@ -1,5 +1,3 @@
-//2D Translations, Rotations and Scaling
-
 #include "include/glad/glad.h"
 #include "include/glm/glm.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
@@ -13,6 +11,11 @@
 #include "include/callbacks.h"
 #include "include/texture_loader.h"
 #include "include/input_processing.h"
+
+const std::string title = "Start Point";
+
+const std::string error_text_glfw_window = "Failed to create Window.";
+const std::string error_text_glad_initialize = "Failed to initialize GLAD.";
 
 float deltaTime = 0.0f, currentFrame = 0.0f, lastFrame = 0.0f;
 
@@ -42,29 +45,28 @@ int main()
 	//Mouse last position
 	mouse.lastX = SCR_WIDTH / 2, mouse.lastY = SCR_HEIGHT / 2;
 	
-	
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "StartPoint", glfwGetPrimaryMonitor(), NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, title.c_str(), glfwGetPrimaryMonitor(), NULL);
     if (window == NULL)
     {
-        std::cout << "Failed to create GLFW window" << std::endl;
+        std::cout << error_text_glfw_window << std::endl;
         glfwTerminate();
         return -1;
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, callback->framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(window, callback->framebuffer_size);
 	
 	// Setting mouse input
-	glfwSetCursorPosCallback(window, callback->mouse_callback);
-	glfwSetScrollCallback(window, callback->scroll_callback);
+	glfwSetCursorPosCallback(window, callback->mouse_input);
+	glfwSetScrollCallback(window, callback->mouse_scroll);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cout << error_text_glad_initialize << std::endl;
         return -1;
     }	
 	
