@@ -14,6 +14,11 @@
 #include "include/texture_loader.h"
 #include "include/input_processing.h"
 
+const std::string title = "Point Sizes";
+
+const std::string error_text_glfw_window = "Failed to create Window.";
+const std::string error_text_glad_initialize = "Failed to initialize GLAD.";
+
 float deltaTime = 0.0f, currentFrame = 0.0f, lastFrame = 0.0f;
 
 Callbacks *callback = new Callbacks();
@@ -45,33 +50,33 @@ int main()
 	
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "StartPoint", glfwGetPrimaryMonitor(), NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, title.c_str(), glfwGetPrimaryMonitor(), NULL);
     if (window == NULL)
     {
-        std::cout << "Failed to create GLFW window" << std::endl;
+        std::cout << error_text_glfw_window << std::endl;
         glfwTerminate();
         return -1;
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, callback->framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(window, callback->framebuffer_size);
 	
 	// Setting mouse input
-	glfwSetCursorPosCallback(window, callback->mouse_callback);
-	glfwSetScrollCallback(window, callback->scroll_callback);
+	glfwSetCursorPosCallback(window, callback->mouse_input);
+	glfwSetScrollCallback(window, callback->mouse_scroll);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cout << error_text_glad_initialize << std::endl;
         return -1;
     }	
 
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
     // build and compile our shader program
     // ------------------------------------
-    Shader ourShader("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl"); 
+    Shader ourShader("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl"); 
 	
 	float vertices[] = {
 		//first triangle

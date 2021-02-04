@@ -12,7 +12,7 @@
 #include "include/callbacks.h"
 #include "include/input_processing.h"
 
-const std::string title = "Start Point";
+const std::string title = "Textures";
 
 const std::string error_text_glfw_window = "Failed to create Window.";
 const std::string error_text_glad_initialize = "Failed to initialize GLAD.";
