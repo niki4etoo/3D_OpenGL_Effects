@@ -13,6 +13,11 @@
 #include "include/callbacks.h"
 #include "include/input_processing.h"
 
+const std::string title = "Fragment Coordination";
+
+const std::string error_text_glfw_window = "Failed to create Window.";
+const std::string error_text_glad_initialize = "Failed to initialize GLAD.";
+
 float deltaTime = 0.0f, currentFrame = 0.0f, lastFrame = 0.0f;
 
 Callbacks *callback = new Callbacks();
@@ -40,10 +45,10 @@ int main()
 	
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Fragment Coordination", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, title.c_str(), NULL, NULL);
     if (window == NULL)
     {
-        std::cout << "Failed to create GLFW window" << std::endl;
+        std::cout << error_text_glfw_window << std::endl;
         glfwTerminate();
         return -1;
     }
@@ -57,7 +62,7 @@ int main()
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cout << error_text_glad_initialize << std::endl;
         return -1;
     }	
 	
