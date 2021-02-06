@@ -17,6 +17,7 @@ const std::string title = "Cube Maps";
 
 const std::string error_text_glfw_window = "Failed to create Window.";
 const std::string error_text_glad_initialize = "Failed to initialize GLAD.";
+const std::string error_text_cubemap_load_path = "Cubemap tex failed to load at path: ";
 
 unsigned int loadCubemap(std::vector<std::string> faces);
 
@@ -316,7 +317,7 @@ unsigned int loadCubemap(std::vector<std::string> faces)
         }
         else
         {
-            std::cout << "Cubemap tex failed to load at path: " << faces[i] << std::endl;
+            std::cout << error_text_cubemap_load_path << faces[i] << std::endl;
             stbi_image_free(data);
         }
     }
