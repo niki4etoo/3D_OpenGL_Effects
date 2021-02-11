@@ -8,4 +8,5 @@ make
 
 Each exercise use the following controls:
 W,S,A,D for moving in the world space
+Some exercises use space key for changing states ( like gamma correction )
 mouse for controlling the camera
