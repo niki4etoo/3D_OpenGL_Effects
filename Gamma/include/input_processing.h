@@ -4,21 +4,15 @@
 #include "camera.h"
 
 class InputProcessing {
-	bool blinn = false;
-	bool blinnKeyPressed = false;
+	bool gammaEnabled = false;
+	bool gammaKeyPressed = false;
 public:
 	InputProcessing(){}
 	~InputProcessing(){}
-	std::string setBlinn(std::string text)
+	bool getGammaEnabled()
 	{
-		return text;
+		return gammaEnabled;
 	}
-	
-	bool getBlinn()
-	{
-		return this->blinn;
-	}
-	
 	void keyboard_input(GLFWwindow *window, float deltaTime) {		
 		camera->MovementSpeed = 5.5f * deltaTime;
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -34,14 +28,14 @@ public:
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 			camera->Position += glm::normalize(glm::cross(camera->Front, camera->Up)) * camera->MovementSpeed;
 			
-		if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS && !blinnKeyPressed) 
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !gammaKeyPressed)
 		{
-			blinn = !blinn;
-			blinnKeyPressed = true;
+			gammaEnabled = !gammaEnabled;
+			gammaKeyPressed = true;
 		}
-		if (glfwGetKey(window, GLFW_KEY_B) == GLFW_RELEASE) 
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
 		{
-			blinnKeyPressed = false;
+			gammaKeyPressed = false;
 		}
 	}
 };

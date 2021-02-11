@@ -29,9 +29,6 @@ float lastY = SCR_HEIGHT / 2.0f;
 float deltaTime = 0.0f;	
 float lastFrame = 0.0f;
 
-// lighting
-glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-
 Callbacks *callback = new Callbacks();
 InputProcessing *input = new InputProcessing();
 
@@ -76,7 +73,6 @@ int main()
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_FRAMEBUFFER_SRGB);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
@@ -112,18 +108,33 @@ int main()
 
     //Load Textures
 	stbi_set_flip_vertically_on_load(true);
-	unsigned int floorTexture;
+	unsigned int floorTexture, floorTextureGammaCorrected;
     
-    TextureLoader tl1("textures/wood.png", floorTexture);
+    TextureLoader tl1("textures/wood.png", floorTexture, false);
+    TextureLoader tl2("textures/wood.png", floorTextureGammaCorrected, true);
+    
+    
     
     // shader configuration
     // --------------------
     shader.use();
-    shader.setInt("texture1", 0);
+    shader.setInt("floorTexture", 0);
 
     // lighting info
     // -------------
-    glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
+    glm::vec3 lightPositions[] = {
+        glm::vec3(-3.0f, 0.0f, 0.0f),
+        glm::vec3(-1.0f, 0.0f, 0.0f),
+        glm::vec3 (1.0f, 0.0f, 0.0f),
+        glm::vec3 (3.0f, 0.0f, 0.0f)
+    };
+    
+    glm::vec3 lightColors[] = {
+        glm::vec3(0.25),
+        glm::vec3(0.50),
+        glm::vec3(0.75),
+        glm::vec3(1.00)
+    };
     
     // render loop
     // -----------
@@ -151,16 +162,18 @@ int main()
         shader.setMat4("projection", projection);
         shader.setMat4("view", view);
         // set light uniforms
+        glUniform3fv(glGetUniformLocation(shader.ID, "lightPositions"), 4, &lightPositions[0][0]);
+        glUniform3fv(glGetUniformLocation(shader.ID, "lightColors"), 4, &lightColors[0][0]);
         shader.setVec3("viewPos", camera->Position);
-        shader.setVec3("lightPos", lightPos);
-        shader.setInt("blinn", input->getBlinn());
+        shader.setInt("gamma", input->getGammaEnabled());
         // floor
         glBindVertexArray(planeVAO);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, floorTexture);
+        glBindTexture(GL_TEXTURE_2D, input->getGammaEnabled() ? floorTextureGammaCorrected : floorTexture);
         glDrawArrays(GL_TRIANGLES, 0, 6);
-		//Pressing "B" key to switch between Blinn-Phong and Phong
-        std::cout << (input->getBlinn() ? input->setBlinn("Blinn-Phong") : input->setBlinn("Phong")) << std::endl;
+
+        std::cout << (input->getGammaEnabled() ? "Gamma enabled" : "Gamma disabled") << std::endl;
+
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
