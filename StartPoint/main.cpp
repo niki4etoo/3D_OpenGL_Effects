@@ -79,7 +79,7 @@ int main()
 	glEnable(GL_DEPTH_TEST);
     // build and compile our shader program
     // ------------------------------------
-    Shader ourShader("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl"); 
+    Shader ourShader("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl"); 
 	
     unsigned int VAO, VBO;
     glGenVertexArrays(1, &VAO);
@@ -122,7 +122,7 @@ int main()
         // input
         // -----
         input->keyboard_input(window, deltaTime);
-
+		std::cout << deltaTime << std::endl;
         // render
         // ------
         glClearColor(0.7f, 0.4f, 0.2f, 1.0f);
