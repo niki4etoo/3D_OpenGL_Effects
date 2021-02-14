@@ -30,7 +30,7 @@ float lastFrame = 0.0f;
 Callbacks *callback = new Callbacks();
 InputProcessing *input = new InputProcessing();
 
-int main()
+int main(int argc, char **argv)
 {
     // glfw: initialize and configure
     // ------------------------------
@@ -83,54 +83,59 @@ int main()
     // load models
     // -----------
     //const std::string model_str = "models/landscape_mountains/landscape_mountains.obj";
-    const std::string model_str = "models/backpack/backpack.obj";
-    Model model_backpack(model_str);
-    
-    // draw in wireframe
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	
-    // render loop
-    // -----------
-    while (!glfwWindowShouldClose(window))
+    if(argc == 2)
     {
-        // per-frame time logic
-        // --------------------
-        float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+		std::string model = argv[1];
+		std::cout << sizeof(argv[1]) << std::endl;
+		std::cout << model << std::endl;
+		const std::string model_str = "models/" + model;
+		Model load_model(model_str);
+		
+		// render loop
+		// -----------
+		while (!glfwWindowShouldClose(window))
+		{
+			// per-frame time logic
+			// --------------------
+			float currentFrame = glfwGetTime();
+			deltaTime = currentFrame - lastFrame;
+			lastFrame = currentFrame;
 
-        // input
-        // -----
-        input->keyboard_input(window, deltaTime);
+			// input
+			// -----
+			input->keyboard_input(window, deltaTime);
 
-        // render
-        // ------
-        glClearColor(0.04f, 0.05f, 0.95f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			// render
+			// ------
+			glClearColor(0.04f, 0.05f, 0.95f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // configure transformation matrices
-        glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 1.0f, 100.0f);
-        glm::mat4 view = camera->GetViewMatrix();;
-        glm::mat4 model = glm::mat4(1.0f);
-        shader.use();
-        shader.setMat4("projection", projection);
-        shader.setMat4("view", view);
-        shader.setMat4("model", model);
+			// configure transformation matrices
+			glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 1.0f, 100.0f);
+			glm::mat4 view = camera->GetViewMatrix();;
+			glm::mat4 model = glm::mat4(1.0f);
+			shader.use();
+			shader.setMat4("projection", projection);
+			shader.setMat4("view", view);
+			shader.setMat4("model", model);
 
-        // add time component to geometry shader in the form of a uniform
-        shader.setFloat("time", glfwGetTime());
+			// add time component to geometry shader in the form of a uniform
+			shader.setFloat("time", glfwGetTime());
 
-        // draw model
-        model_backpack.Draw(shader);
-        
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
+			// draw model
+			load_model.Draw(shader);
+			
+			// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+			// -------------------------------------------------------------------------------
+			glfwSwapBuffers(window);
+			glfwPollEvents();
+		}
 
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
-    glfwTerminate();
+		// glfw: terminate, clearing all previously allocated GLFW resources.
+		// ------------------------------------------------------------------
+		glfwTerminate();
+	} else if (argc == 1 ) {
+		std::cout << "Please, enter the second argument ( path to the model )" << std::endl;
+	}
     return 0;
 }
