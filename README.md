@@ -10,3 +10,6 @@ Each exercise use the following controls:
 W,S,A,D for moving in the world space
 Some exercises use space key for changing states ( like gamma correction ) and
 mouse for controlling the camera
+
+The model loading exercises you can load your model like so:
+./model_loading your_model_path/your_model.obj
