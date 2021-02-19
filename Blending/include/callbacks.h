@@ -1,15 +1,16 @@
-#ifndef _CALLBACKS_H
-#define _CALLBACKS_H
+#ifndef CALLBACKS_H
+#define CALLBACKS_H
 
-#include "camera.h"
 #include "mouse.h"
+#include "camera.h"
 
 struct Mouse mouse;
 
 Camera* camera = new Camera();
 
 class Callbacks {
-       public:
+
+public:
 	Callbacks(){};
 	~Callbacks(){};
 
