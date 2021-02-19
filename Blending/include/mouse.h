@@ -1,5 +1,5 @@
 struct Mouse {
-	//Mouse parameters
+	// Mouse parameters
 	bool firstMouse = true;
 	const float sensitivity = 0.1f;
 	float pitch = 0.0f, yaw = -90.0f;
