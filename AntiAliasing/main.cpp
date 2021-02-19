@@ -1,16 +1,15 @@
-#include <GLFW/glfw3.h>
 #include "include/glad/glad.h"
-
 #include <iostream>
+#include <GLFW/glfw3.h>
 
-#include "include/callbacks.h"
-#include "include/camera.h"
 #include "include/glm/glm.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "include/glm/gtc/type_ptr.hpp"
+#include "include/callbacks.h"
 #include "include/input_processing.h"
-#include "include/loaders/texture_loader.h"
 #include "include/shader.h"
+#include "include/loaders/texture_loader.h"
+
 
 const std::string title = "Anti Aliasing";
 

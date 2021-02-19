@@ -1,5 +1,5 @@
-#ifndef _CALLBACKS_H
-#define _CALLBACKS_H
+#ifndef CALLBACKS_H
+#define CALLBACKS_H
 
 #include "mouse.h"
 #include "camera.h"
