@@ -1,7 +1,4 @@
-#ifndef _GLM_H_
-#define _GLM_H_
 #include "glm/glm.hpp"
-#endif
 
 struct data_vertices {
 	float cube_vertices[180] = {
