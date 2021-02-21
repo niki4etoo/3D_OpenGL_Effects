@@ -1,5 +1,5 @@
-#ifndef _CAMERA_H
-#define _CAMERA_H
+#ifndef CAMERA_H
+#define CAMERA_H
 
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 1.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
