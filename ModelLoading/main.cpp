@@ -30,71 +30,71 @@ float lastFrame = 0.0f;
 Callbacks *callback = new Callbacks();
 InputProcessing *input = new InputProcessing();
 
-int main(int argc, char **argv)
-{
-    // glfw: initialize and configure
-    // ------------------------------
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+int main(int argc, char **argv) {
+	// glfw: initialize and configure
+	// ------------------------------
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    // glfw window creation
-    // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, title.c_str(), NULL, NULL);
-    if (window == NULL)
-    {
-        std::cout << error_text_glfw_window << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, callback->framebuffer_size);
-    glfwSetCursorPosCallback(window, callback->mouse_input);
-    glfwSetScrollCallback(window, callback->mouse_scroll);
+	// glfw window creation
+	// --------------------
+	GLFWwindow *window =
+	    glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, title.c_str(), NULL, NULL);
+	if (window == NULL) {
+		std::cout << error_text_glfw_window << std::endl;
+		glfwTerminate();
+		return -1;
+	}
 
-    // tell GLFW to capture our mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, callback->framebuffer_size);
+	glfwSetCursorPosCallback(window, callback->mouse_input);
+	glfwSetScrollCallback(window, callback->mouse_scroll);
 
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << error_text_glad_initialize << std::endl;
-        return -1;
-    }
+	// tell GLFW to capture our mouse
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-    stbi_set_flip_vertically_on_load(true);
+	// glad: load all OpenGL function pointers
+	// ---------------------------------------
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+		std::cout << error_text_glad_initialize << std::endl;
+		return -1;
+	}
 
-    // configure global opengl state
-    // -----------------------------
-    glEnable(GL_DEPTH_TEST);
+	// tell stb_image.h to flip loaded texture's on the y-axis (before
+	// loading model).
+	stbi_set_flip_vertically_on_load(true);
 
-    // build and compile shaders
-    // -------------------------
-    Shader shader("shaders/model_vertex.glsl", "shaders/model_fragment.glsl", "shaders/model_geometry_explode.glsl");
-    	
-    // load models
-    // -----------
-    //const std::string model_str = "models/landscape_mountains/landscape_mountains.obj";
-    if(argc == 2)
-    {
+	// configure global opengl state
+	// -----------------------------
+	glEnable(GL_DEPTH_TEST);
+
+	// build and compile shaders
+	// -------------------------
+	Shader shader("shaders/model_vertex.glsl",
+		      "shaders/model_fragment.glsl",
+		      "shaders/model_geometry_explode.glsl");
+
+	// load models
+	// -----------
+	// const std::string model_str =
+	// "models/landscape_mountains/landscape_mountains.obj";
+	if (argc == 2) {
 		std::string model = argv[1];
 		std::cout << sizeof(argv[1]) << std::endl;
 		std::cout << model << std::endl;
 		const std::string model_str = "models/" + model;
 		Model load_model(model_str);
-		
+
 		// render loop
 		// -----------
-		while (!glfwWindowShouldClose(window))
-		{
+		while (!glfwWindowShouldClose(window)) {
 			// per-frame time logic
 			// --------------------
 			float currentFrame = glfwGetTime();
@@ -111,31 +111,39 @@ int main(int argc, char **argv)
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			// configure transformation matrices
-			glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 1.0f, 100.0f);
-			glm::mat4 view = camera->GetViewMatrix();;
+			glm::mat4 projection = glm::perspective(
+			    glm::radians(45.0f),
+			    (float)SCR_WIDTH / (float)SCR_HEIGHT, 1.0f, 100.0f);
+			glm::mat4 view = camera->GetViewMatrix();
+			;
 			glm::mat4 model = glm::mat4(1.0f);
 			shader.use();
 			shader.setMat4("projection", projection);
 			shader.setMat4("view", view);
 			shader.setMat4("model", model);
 
-			// add time component to geometry shader in the form of a uniform
+			// add time component to geometry shader in the form of
+			// a uniform
 			shader.setFloat("time", glfwGetTime());
 
 			// draw model
 			load_model.Draw(shader);
-			
-			// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+
+			// glfw: swap buffers and poll IO events (keys
+			// pressed/released, mouse moved etc.)
 			// -------------------------------------------------------------------------------
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 		}
 
-		// glfw: terminate, clearing all previously allocated GLFW resources.
+		// glfw: terminate, clearing all previously allocated GLFW
+		// resources.
 		// ------------------------------------------------------------------
 		glfwTerminate();
-	} else if (argc == 1 ) {
-		std::cout << "Please, enter the second argument ( path to the model )" << std::endl;
+	} else if (argc == 1) {
+		std::cout
+		    << "Please, enter the second argument ( path to the model )"
+		    << std::endl;
 	}
-    return 0;
+	return 0;
 }
