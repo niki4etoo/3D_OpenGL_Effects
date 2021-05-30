@@ -1,5 +1,5 @@
 # 3D OpenGL Effects
-Several exercises and effects with OpenGL, GLSL and C++. There is a very good tutorial site for learning OpenGL ( https://learnopengl.com/ ). The exercises in this repository are based on the tutorial from the mentioned site.
+There are several exercises and effects with OpenGL, GLSL and C++. There is a very good tutorial site for learning OpenGL ( https://learnopengl.com/ ). The exercises in this repository are based on the tutorial from the mentioned site.
 
 # Run exercises on linux
 make
